@@ -11,13 +11,15 @@ class Config:
     elastic_server = os.getenv("ELASTIC_SERVER")
     elastic_user = os.getenv("ELASTIC_USER")
     elastic_password = os.getenv("ELASTIC_PASSWORD")
+    ca_certs=os.getenv("CA_CERTS")
+    cert_fingerprint=os.getenv("CERT_FINGERPRINT")
     elastic_verify_certificates = os.getenv("ELASTIC_VERIFY_CERTIFICATES") == "true"
 
-    es = Elasticsearch(
+    es = Elasticsearch(  
         [elastic_server],
-        basic_auth=(elastic_user, elastic_password),
-        verify_certs=elastic_verify_certificates,
-    )
+        basic_auth = (elastic_user, elastic_password),
+        ssl_assert_fingerprint = cert_fingerprint,
+        http_compress = True )   
 
     elastic_index_data_from = int(os.getenv("ELASTIC_INDEX_DATA_FROM"))
     elastic_index_data_size = int(os.getenv("ELASTIC_INDEX_DATA_SIZE"))
